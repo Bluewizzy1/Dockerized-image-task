@@ -1,0 +1,27 @@
+services:
+  web:
+    build: .
+    command: python /app/manage.py runserver
+    ports:
+      - 8000:8000
+    volumes:
+      - .:/app
+    depends_on:
+    - mvp_db
+
+  mvp_db:
+    image: postgres:13
+    volumes:
+      - postgres_data:/var/lib/postgres/data/
+    environment:
+      - "POSTGRES_HOST_AUTH_METHOD=trust"
+
+  react:
+    build: .
+    command: npm start
+    image: node:20-alpine3.17
+    ports:
+      - 3000:3000
+
+volumes:
+  postgres_data:
